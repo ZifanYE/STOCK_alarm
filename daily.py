@@ -137,10 +137,9 @@ def build_message(hits: list[dict], day: datetime.date, data_date: str) -> str:
     strong = [h for h in hits if h["score"] >= 2]
 
     def compose(verbose: bool) -> str:
-        L = [f"### 📈 {ds}｜买入信号 {len(hits)} 只 / {len(groups)} 个行业"]
-
-        # 全部名字放最前面 —— 这一段决定了老板锁屏能看到什么
-        L.append(f"> {'、'.join(h['name'] for h in hits)}")
+        ###具体的格式
+        names = "、".join(h["name"] for h in hits)
+        L = [f"### 📈 {ds}｜买入信号 {len(hits)} 只 / {len(groups)} 个行业：{names}"]
         if strong:
             L.append(f"> 🔥 <font color=\"warning\">金叉+底背离共振："
                      f"{'、'.join(h['name'] for h in strong)}</font>")
