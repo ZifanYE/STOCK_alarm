@@ -3,13 +3,19 @@ name: daily-signal
 on:
   schedule:
     # UTC 11:30 = 北京时间 19:30。
-    # 为什么是晚上：baostock 的当日行情要 19:00 后才更新，15:15 跑库里还是昨天的。
-    # 日线 MACD 本来就是收盘后成立、次日执行，晚上推没有任何时效损失。
-    #
-    # ⚠️ GitHub 的 cron 在整点前后是高峰，可能延迟 5-20 分钟。写 :30 而不是 :00，
-    #    既避开高峰，也给 baostock 留出更新余量。
+    # baostock 当日行情要 19:00 后才更新，15:15 跑库里还是昨天的。
+    # cron 在整点前后是高峰，写 :30 避开，也给 baostock 留余量。
     - cron: '30 11 * * 1-5'
-  workflow_dispatch:          # 支持在网页上手动点一下就跑
+
+  workflow_dispatch:
+    inputs:
+      force:
+        description: '忽略交易日判断（周末/节假日手动测试时勾上）'
+        type: boolean
+        default: true          # 手动跑基本都是测试，默认开
+
+permissions:
+  contents: write              # 没有这个，最后一步 git push 会 403
 
 jobs:
   signal:
@@ -19,17 +25,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # ubuntu runner 默认没有中文字体，不装的话图片里的中文全是方框
+      - name: Install CJK font
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq fonts-noto-cjk
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: pip
 
-      - run: pip install baostock pandas requests
+      - run: pip install -r requirements.txt
 
-      # --- 关键：用缓存持有 market.db，不提交进仓库 ---
-      # 每天 commit 一个 20MB 的二进制文件，一年会把仓库撑到几个 GB。
-      # 缓存的 key 带日期，restore-keys 让它总能捡到最近一次的库，
-      # 于是每天只需增量补一天，不用重新全量拉。
       - name: Restore database
         uses: actions/cache/restore@v4
         with:
@@ -38,25 +44,34 @@ jobs:
           restore-keys: |
             market-db-
 
+      - name: Show state
+        run: |
+          echo "北京时间: $(TZ=Asia/Shanghai date '+%F %T %A')"
+          ls -lh data/ 2>/dev/null || echo "data/ 不存在（首次运行，会全量拉取）"
+
       - name: Run
         env:
           WECOM_HOOK: ${{ secrets.WECOM_HOOK }}
-        run: python daily.py
+        run: |
+          if [ "${{ inputs.force }}" = "true" ]; then
+            python daily.py --force
+          else
+            python daily.py
+          fi
 
-      # 缓存条目不可覆盖，所以每次用新 key 存一份，靠 restore-keys 前缀匹配捡最新的
+      # 只在数据库真的存在时才存缓存，否则会刷 Path Validation Error
       - name: Save database
-        if: always()
+        if: ${{ hashFiles('data/market.db') != '' }}
         uses: actions/cache/save@v4
         with:
           path: data/market.db
           key: market-db-${{ github.run_id }}
 
-      # 信号结果很小（几 KB），这个可以放心提交，方便回溯和给 Streamlit 读
       - name: Commit signals
-        if: always()
+        if: ${{ hashFiles('data/signals.json') != '' }}
         run: |
           git config user.name  "signal-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add -f data/signals.json 2>/dev/null || true
-          git diff --staged --quiet || git commit -m "signals $(date -u +%F)"
+          git add -f data/signals.json
+          git diff --staged --quiet || git commit -m "signals $(TZ=Asia/Shanghai date +%F)"
           git push || true
