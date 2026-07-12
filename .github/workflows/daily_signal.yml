@@ -1,0 +1,62 @@
+name: daily-signal
+
+on:
+  schedule:
+    # UTC 11:30 = 北京时间 19:30。
+    # 为什么是晚上：baostock 的当日行情要 19:00 后才更新，15:15 跑库里还是昨天的。
+    # 日线 MACD 本来就是收盘后成立、次日执行，晚上推没有任何时效损失。
+    #
+    # ⚠️ GitHub 的 cron 在整点前后是高峰，可能延迟 5-20 分钟。写 :30 而不是 :00，
+    #    既避开高峰，也给 baostock 留出更新余量。
+    - cron: '30 11 * * 1-5'
+  workflow_dispatch:          # 支持在网页上手动点一下就跑
+
+jobs:
+  signal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - run: pip install baostock pandas requests
+
+      # --- 关键：用缓存持有 market.db，不提交进仓库 ---
+      # 每天 commit 一个 20MB 的二进制文件，一年会把仓库撑到几个 GB。
+      # 缓存的 key 带日期，restore-keys 让它总能捡到最近一次的库，
+      # 于是每天只需增量补一天，不用重新全量拉。
+      - name: Restore database
+        uses: actions/cache/restore@v4
+        with:
+          path: data/market.db
+          key: market-db-${{ github.run_id }}
+          restore-keys: |
+            market-db-
+
+      - name: Run
+        env:
+          WECOM_HOOK: ${{ secrets.WECOM_HOOK }}
+        run: python daily.py
+
+      # 缓存条目不可覆盖，所以每次用新 key 存一份，靠 restore-keys 前缀匹配捡最新的
+      - name: Save database
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: data/market.db
+          key: market-db-${{ github.run_id }}
+
+      # 信号结果很小（几 KB），这个可以放心提交，方便回溯和给 Streamlit 读
+      - name: Commit signals
+        if: always()
+        run: |
+          git config user.name  "signal-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add -f data/signals.json 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "signals $(date -u +%F)"
+          git push || true
