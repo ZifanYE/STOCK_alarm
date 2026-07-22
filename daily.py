@@ -261,6 +261,12 @@ def main():
         print("\n(--dry，未推送)")
         return
 
+    # 归档今日推荐 → picks 表，供 review.py 日后复盘（放在 --dry 分支之后：只记真实推送）
+    import review
+    n_rec = review.record_picks(today, hits)  # 自己写 picks.db，不碰 market.db
+    if n_rec:
+        print(f"🗂  已归档 {n_rec} 条推荐 → picks 表（review.py 复盘用）")
+
     push(msg, "markdown")
 
 
