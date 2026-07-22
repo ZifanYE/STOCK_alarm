@@ -259,15 +259,23 @@ def main():
         print(f"\n===== 单条消息（{len(msg.encode())} 字节 / 上限 4096）=====")
         print(msg)
         print("\n(--dry，未推送)")
-        return
+    else:
+        # 归档今日推荐 → picks 表，供 review.py 日后复盘
+        import review
+        n_rec = review.record_picks(today, hits)  # 自己写 picks.db，不碰 market.db
+        if n_rec:
+            print(f"🗂  已归档 {n_rec} 条推荐 → picks 表（review.py 复盘用）")
 
-    # 归档今日推荐 → picks 表，供 review.py 日后复盘（放在 --dry 分支之后：只记真实推送）
-    import review
-    n_rec = review.record_picks(today, hits)  # 自己写 picks.db，不碰 market.db
-    if n_rec:
-        print(f"🗂  已归档 {n_rec} 条推荐 → picks 表（review.py 复盘用）")
+        push(msg, "markdown")
 
-    push(msg, "markdown")
+    # 再跑每日复盘
+    import subprocess
+
+    cmd = [sys.executable, "review.py"]
+    if args.dry:
+        cmd.append("--dry")
+
+    subprocess.run(cmd, check=False)
 
 
 if __name__ == "__main__":
