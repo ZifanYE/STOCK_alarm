@@ -73,5 +73,6 @@ jobs:
           git config user.name  "signal-bot"
           git config user.email "bot@users.noreply.github.com"
           git add -f data/signals.json
+          git add -f data/picks.db || true
           git diff --staged --quiet || git commit -m "signals $(TZ=Asia/Shanghai date +%F)"
           git push || true
