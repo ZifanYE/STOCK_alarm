@@ -166,8 +166,8 @@ def build_message(hits: list[dict], day: datetime.date, data_date: str) -> str:
         return "\n".join(L)
 
     msg = compose(verbose=True)
-   # if len(msg.encode()) > 4000:
-    #    msg = compose(verbose=False)      # 降级：砍掉 DIF 暂时不需要限制
+    if len(msg.encode()) > 4000:
+        msg = compose(verbose=False)      # 降级：砍掉 DIF 暂时不需要限制
     return msg
 
 
