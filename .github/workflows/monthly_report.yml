@@ -1,0 +1,93 @@
+name: monthly-report
+
+# 每月 1 号统计上个月的推荐战记，生成 reports/monthly/YYYY-MM.json，
+# 并推到 Astock 仓库的 data/monthly/ 下（Streamlit Cloud 检测到 push 会自动重新部署）。
+#
+# 前置：在本仓库 Settings → Secrets → Actions 里加 ASTOCK_TOKEN，
+#      值为一个对 ZifanYE/Astock 有 Contents: Read and write 权限的 fine-grained PAT。
+
+on:
+  schedule:
+    # UTC 01:45 = 北京时间 09:45。上个月最后一个交易日的行情早已入库。
+    # 避开整点高峰。
+    - cron: '45 1 1 * *'
+
+  workflow_dispatch:
+    inputs:
+      month:
+        description: '统计月份 YYYY-MM（留空 = 上个月）。月底几天的 T+14 月初还没到期，月中重跑可补全'
+        type: string
+        default: ''
+
+permissions:
+  contents: write              # 把月报 commit 回本仓库存档
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Build report
+        id: build
+        run: |
+          if [ -n "${{ inputs.month }}" ]; then
+            MONTH="${{ inputs.month }}"
+          else
+            MONTH=$(TZ=Asia/Shanghai date -d "$(TZ=Asia/Shanghai date +%Y-%m-01) -1 day" +%Y-%m)
+          fi
+          echo "统计月份: $MONTH"
+          python monthly.py --month "$MONTH"
+          if [ -f "reports/monthly/$MONTH.json" ]; then
+            echo "month=$MONTH" >> "$GITHUB_OUTPUT"
+          else
+            echo "没有生成月报（该月无推荐记录），跳过上传"
+          fi
+
+      - name: Archive in this repo
+        if: steps.build.outputs.month != ''
+        run: |
+          git config user.name  "signal-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add -f reports/monthly/
+          git diff --staged --quiet || git commit -m "monthly report ${{ steps.build.outputs.month }}"
+          git push || true
+
+      - name: Checkout Astock
+        if: steps.build.outputs.month != ''
+        uses: actions/checkout@v4
+        with:
+          repository: ZifanYE/Astock
+          token: ${{ secrets.ASTOCK_TOKEN }}
+          path: astock
+
+      - name: Upload to Astock
+        if: steps.build.outputs.month != ''
+        run: |
+          MONTH="${{ steps.build.outputs.month }}"
+          mkdir -p astock/data/monthly
+          cp "reports/monthly/$MONTH.json" astock/data/monthly/
+          cd astock
+          git config user.name  "signal-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/monthly/
+          if git diff --staged --quiet; then
+            echo "Astock 上的月报无变化"
+            exit 0
+          fi
+          git commit -m "月度战记 $MONTH"
+          # Astock 那边可能刚有别的提交，rebase 一下再推，失败重试
+          for i in 1 2 3; do
+            git pull --rebase && git push && exit 0
+            sleep $((i * 5))
+          done
+          echo "❌ 推送 Astock 失败"; exit 1
