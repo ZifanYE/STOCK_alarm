@@ -40,7 +40,7 @@ def _codes(conn):
 
 
 def today(conn, ratio, shrink):
-    """今天触发的 + 观察名单（绿柱已够长，但还在变长或还没缩短到位）。"""
+    """今天触发的 + 观察名单（绿柱已够长、已开始缩短，但还没缩短到位）。"""
     hits, watch = [], []
     for code, name, kind, industry in _codes(conn):
         df = store.load(conn, code, limit=LOAD)
@@ -52,7 +52,7 @@ def today(conn, ratio, shrink):
                          df["close"].iloc[-1], g["shrink"].iloc[-1]))
             continue
         w = _watch_now(df)
-        if w is not None and w[0] >= ratio:
+        if w is not None and w[0] >= ratio and w[1] > 0:     # 还在变长的不要
             watch.append((w[0], code, name, industry, df["close"].iloc[-1], w[1]))
 
     newest = conn.execute("SELECT MAX(date) FROM daily").fetchone()[0]
@@ -60,17 +60,16 @@ def today(conn, ratio, shrink):
     print(f"🔭 今天触发 {len(hits)} 只（长绿柱明显变短）：")
     for st, code, name, ind, close, sh in sorted(hits, reverse=True):
         print(f"  {name}({code})  ¥{close:.2f}  绿柱为常态 {st:.1f} 倍  已缩短 {sh:.0%}  {ind}")
-    print(f"\n👀 观察名单 {len(watch)} 只（绿柱已够长，还在变长或缩短还不到 {shrink:.0%}）：")
+    print(f"\n👀 观察名单 {len(watch)} 只（绿柱已够长、已开始缩短，但还不到 {shrink:.0%}）：")
     for st, code, name, ind, close, sh in sorted(watch, reverse=True)[:30]:
-        state = "还在变长" if sh == 0 else f"已缩短 {sh:.0%}"
-        print(f"  {name}({code})  ¥{close:.2f}  绿柱为常态 {st:.1f} 倍  {state}  {ind}")
+        print(f"  {name}({code})  ¥{close:.2f}  绿柱为常态 {st:.1f} 倍  已缩短 {sh:.0%}  {ind}")
     if len(watch) > 30:
         print(f"  …另有 {len(watch)-30} 只")
 
 
 def _watch_now(df):
     """
-    今天仍是零轴下的绿柱，且本波最长那根到今天一路在变短（或今天就是最长）时，
+    今天仍是零轴下的绿柱，且本波最长那根到今天一路在变短时，
     返回 (最长绿柱是常态的几倍, 已缩短多少)；否则 None。
     """
     dif, _, hist = sig.macd(df["close"])
