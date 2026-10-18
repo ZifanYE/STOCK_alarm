@@ -85,7 +85,7 @@ def cn_date(d: datetime.date) -> str:
 # 扫描
 # =============================================================================
 def scan(conn) -> tuple[list[dict], list[dict]]:
-    """返回 (买入信号, 金叉预警)。"""
+    """返回 (买入信号, 绿柱缩短)。"""
     codes = store.all_codes(conn)
     if not codes:
         print("❌ 数据库是空的。先跑： python fetch_bs.py --full")
@@ -99,15 +99,15 @@ def scan(conn) -> tuple[list[dict], list[dict]]:
         if r:
             r.update(info)
             hits.append(r)
-        p = sig.scan_pre_cross(df)
+        p = sig.scan_green_shrink(df)
         if p:
             p.update(info)
             pre.append(p)
 
     # 先按行业聚在一起（方便看扎堆），行业内多重信号排前面
     hits = sorted(hits, key=lambda x: (x["industry"], -x["score"], x["code"]))
-    # 预警按这一波跌幅排，跌得越深越靠前
-    pre = sorted(pre, key=lambda x: -x["drop"])
+    # 绿柱越长（相对自己的常态）越靠前
+    pre = sorted(pre, key=lambda x: -x["strength"])
     return hits, pre
 
 
@@ -122,18 +122,15 @@ def group_by_industry(hits: list[dict]) -> list[tuple[str, list]]:
 # =============================================================================
 # 企微 markdown
 # =============================================================================
-def pre_cross_lines(pre: list[dict], limit: int) -> list[str]:
-    """金叉预警段落。need ≤ 0 表示明天平收也会金叉。"""
+def shrink_lines(pre: list[dict], limit: int) -> list[str]:
+    """绿柱缩短段落：长绿柱第一天变短，尚未金叉。"""
     if not pre:
         return []
-    L = [f"> **🔭 金叉预警 {len(pre)} 只**　<font color=\"comment\">"
-         f"深跌后 MACD 拐头，尚未金叉</font>"]
+    L = [f"> **🔭 绿柱缩短 {len(pre)} 只**　<font color=\"comment\">"
+         f"长绿柱第一天变短，尚未金叉</font>"]
     for h in pre[:limit]:
-        need = ("明日平收即金叉" if h["need"] <= 0
-                else f"明日涨 {h['need']*100:.1f}% 即金叉")
         L.append(f"> ▫ {h['name']}　`{h['code']}`　¥{h['close']}"
-                 f"　<font color=\"info\">波段跌 {h['drop']*100:.0f}%</font>"
-                 f"　<font color=\"warning\">{need}</font>")
+                 f"　<font color=\"warning\">绿柱为常态 {h['strength']:.1f} 倍</font>")
     if len(pre) > limit:
         L.append(f"> <font color=\"comment\">…另有 {len(pre)-limit} 只</font>")
     L.append("> ")
@@ -159,7 +156,7 @@ def build_message(hits: list[dict], day: datetime.date, data_date: str,
     if not hits:
         L = [f"### 📉 {ds}｜今日无买入信号",
              "> 沪深300 中，MACD 金叉 / 底背离均无标的命中。", "> "]
-        L += pre_cross_lines(pre, limit=15)
+        L += shrink_lines(pre, limit=15)
         L.append(f"> <font color=\"comment\">数据截至 {data_date}｜非投资建议</font>")
         return "\n".join(L)
 
@@ -188,7 +185,7 @@ def build_message(hits: list[dict], day: datetime.date, data_date: str,
                     f"{'+'.join(h['signals'])}</font>{dif}")
             L.append("> ")
 
-        L += pre_cross_lines(pre, limit=10 if verbose else 5)
+        L += shrink_lines(pre, limit=10 if verbose else 5)
 
         if crowded:
             L.append(f"> <font color=\"warning\">⚠️ {'、'.join(crowded)} 同板块共振，"
@@ -206,15 +203,15 @@ def build_message(hits: list[dict], day: datetime.date, data_date: str,
 
 def merge_for_record(hits: list[dict], pre: list[dict]) -> list[dict]:
     """
-    归档用：预警也写进 picks.db（信号名「金叉预警」），复盘/月报才能统计它准不准。
-    picks 表主键是 (date, code)，同一只既有底背离又有预警时合并成一行。
+    归档用：绿柱缩短也写进 picks.db（信号名「绿柱缩短」），复盘/月报才能统计它准不准。
+    picks 表主键是 (date, code)，同一只既有底背离又有绿柱缩短时合并成一行。
     """
     out = {h["code"]: {**h, "signals": list(h["signals"])} for h in hits}
     for p in pre:
         if p["code"] in out:
-            out[p["code"]]["signals"].append("金叉预警")
+            out[p["code"]]["signals"].append("绿柱缩短")
         else:
-            out[p["code"]] = {**p, "signals": ["金叉预警"], "score": 1}
+            out[p["code"]] = {**p, "signals": ["绿柱缩短"], "score": 1}
     return list(out.values())
 
 
@@ -292,14 +289,14 @@ def main():
               f"{h['close']}  {'/'.join(h['signals'])}")
     if len(hits) > 25:
         print(f"  …另有 {len(hits)-25} 只")
-    print(f"\n金叉预警 {len(pre)} 只：")
+    print(f"\n绿柱缩短 {len(pre)} 只：")
     for h in pre[:25]:
         print(f"  ▫ {h['name']}({h['code']}) {h['close']}  "
-              f"跌 {h['drop']*100:.0f}%  距金叉需涨 {h['need']*100:+.1f}%")
+              f"绿柱为常态 {h['strength']:.1f} 倍")
 
     with open("data/signals.json", "w", encoding="utf-8") as f:
         json.dump({"date": str(today), "data_date": newest, "hits": hits,
-                   "pre_cross": pre},
+                   "green_shrink": pre},
                   f, ensure_ascii=False, indent=2)
 
     msg = build_message(hits, today, newest or "-", pre)
