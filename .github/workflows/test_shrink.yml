@@ -18,6 +18,10 @@ on:
         description: '绿柱「很长」的倍数'
         type: string
         default: '2.0'
+      shrink:
+        description: '「明显缩短」的幅度（0.2 = 20%）'
+        type: string
+        default: '0.2'
 
 jobs:
   test:
@@ -48,9 +52,9 @@ jobs:
             echo "❌ 没取到 market.db 缓存，先让 daily-signal 跑一次"; exit 1
           fi
           if [ -n "${{ inputs.code }}" ]; then
-            python test_shrink.py --code "${{ inputs.code }}" --ratio "${{ inputs.ratio }}"
+            python test_shrink.py --code "${{ inputs.code }}" --ratio "${{ inputs.ratio }}" --shrink "${{ inputs.shrink }}"
           elif [ "${{ inputs.days }}" != "0" ]; then
-            python test_shrink.py --days "${{ inputs.days }}" --ratio "${{ inputs.ratio }}"
+            python test_shrink.py --days "${{ inputs.days }}" --ratio "${{ inputs.ratio }}" --shrink "${{ inputs.shrink }}"
           else
-            python test_shrink.py --ratio "${{ inputs.ratio }}"
+            python test_shrink.py --ratio "${{ inputs.ratio }}" --shrink "${{ inputs.shrink }}"
           fi

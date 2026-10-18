@@ -123,14 +123,15 @@ def group_by_industry(hits: list[dict]) -> list[tuple[str, list]]:
 # 企微 markdown
 # =============================================================================
 def shrink_lines(pre: list[dict], limit: int) -> list[str]:
-    """绿柱缩短段落：长绿柱第一天变短，尚未金叉。"""
+    """绿柱缩短段落：长绿柱明显变短，尚未金叉。"""
     if not pre:
         return []
     L = [f"> **🔭 绿柱缩短 {len(pre)} 只**　<font color=\"comment\">"
-         f"长绿柱第一天变短，尚未金叉</font>"]
+         f"长绿柱明显变短，尚未金叉</font>"]
     for h in pre[:limit]:
         L.append(f"> ▫ {h['name']}　`{h['code']}`　¥{h['close']}"
-                 f"　<font color=\"warning\">绿柱为常态 {h['strength']:.1f} 倍</font>")
+                 f"　<font color=\"warning\">绿柱为常态 {h['strength']:.1f} 倍"
+                 f"，已缩短 {h['shrink']*100:.0f}%</font>")
     if len(pre) > limit:
         L.append(f"> <font color=\"comment\">…另有 {len(pre)-limit} 只</font>")
     L.append("> ")
@@ -292,7 +293,7 @@ def main():
     print(f"\n绿柱缩短 {len(pre)} 只：")
     for h in pre[:25]:
         print(f"  ▫ {h['name']}({h['code']}) {h['close']}  "
-              f"绿柱为常态 {h['strength']:.1f} 倍")
+              f"绿柱为常态 {h['strength']:.1f} 倍，已缩短 {h['shrink']*100:.0f}%")
 
     with open("data/signals.json", "w", encoding="utf-8") as f:
         json.dump({"date": str(today), "data_date": newest, "hits": hits,
