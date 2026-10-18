@@ -92,6 +92,97 @@ def bullish_divergence(
 
 
 # =============================================================================
+# 信号 3：绿柱缩短 —— 一大段绿柱之后，第一天开始变短
+# =============================================================================
+# 金叉是滞后的：等 DIF 上穿 DEA，价格往往已经离最低点反弹了一截。
+# 绿柱最长的那天，往往就是这一波下跌动能最强的时候；它明显变短，
+# 是 MACD 开始拐头的信号，通常比金叉早好几天。
+# 只缩短一点点（比如 1%）不算，那多半是噪音，第二天又接着变长。
+#
+# 「很长」不能用绝对值：黄金 ETF 的正常绿柱只有创业板的一半。
+# 所以和这只票**自己过去一年**的绿柱比：本波最长绿柱 ≥ 过去一年各波
+# 最长绿柱中位数的 ratio 倍，才算「很长」。只用当天收盘为止的数据。
+# =============================================================================
+def green_shrink(
+    df: pd.DataFrame,
+    ratio: float = 2.0,
+    min_shrink: float = 0.20,
+    lookback: int = 250,
+    min_waves: int = 3,
+) -> pd.DataFrame:
+    """
+    逐日标记，返回 DataFrame：flag 是否触发，strength 本波最长绿柱是常态的几倍，
+    shrink 今天的绿柱比最长那根短了多少。
+
+    触发条件：
+      1. 零轴下方：DIF < 0，且今天仍是绿柱（hist < 0，尚未金叉）
+      2. 明显缩短：从本波最长那根绿柱起，之后每天都在变短（中间没有再变长），
+         且累计缩短 ≥ min_shrink（默认 20%）。只在**第一次**达到这个幅度的那天触发
+      3. 很长：最长那根绿柱 ≥ 过去 lookback 天里各波最长绿柱中位数 × ratio
+         （过去不足 min_waves 波绿柱时没有参照，不触发）
+    """
+    close = df["close"]
+    dif, _, hist = macd(close)
+    h = hist.values
+    d = dif.values
+    n = len(df)
+
+    # 每一波绿柱的编号；cummin 得到「截至当天本波最长的绿柱」
+    wave_id = (hist >= 0).cumsum()
+    wave_min = hist.where(hist < 0).groupby(wave_id).cummin().values
+
+    # 每波绿柱结束的位置和它的最长绿柱，用来当「常态」参照
+    ends, troughs = [], []
+    for i in range(1, n):
+        if h[i] >= 0 > h[i - 1]:
+            ends.append(i)
+            troughs.append(-wave_min[i - 1])
+    ends, troughs = np.array(ends), np.array(troughs)
+
+    flag = np.zeros(n, dtype=bool)
+    strength = np.full(n, np.nan)
+    shrink = np.full(n, np.nan)
+    for i in range(2, n):
+        if not (h[i] < 0 and d[i] < 0 and h[i] > h[i - 1]):
+            continue
+        # 往回找本波最长那根：要求从它到今天一路都在变短
+        t = i - 1
+        while t > 0 and h[t - 1] < 0 and h[t] > h[t - 1]:
+            t -= 1
+        if h[t] != wave_min[t]:
+            continue                    # 中途又变长过，或最长的不在这段里
+        trough = -h[t]
+        sh = (h[i] - h[t]) / trough      # 今天累计缩短
+        sh_prev = (h[i - 1] - h[t]) / trough
+        if not (sh >= min_shrink > sh_prev):
+            continue                    # 只在第一次达到幅度那天触发
+        past = troughs[(ends < t) & (ends >= t - lookback)] if len(ends) else []
+        if len(past) < min_waves:
+            continue
+        st = trough / np.median(past)
+        strength[i], shrink[i] = st, sh
+        flag[i] = st >= ratio
+
+    return pd.DataFrame({"flag": flag, "strength": strength, "shrink": shrink},
+                        index=df.index)
+
+
+def scan_green_shrink(df: pd.DataFrame, **kw) -> dict:
+    """最新一根 K 线是否是「长绿柱第一天缩短」。没触发返回 {}。"""
+    if df is None or len(df) < 120:
+        return {}
+    r = green_shrink(df, **kw).iloc[-1]
+    if not bool(r["flag"]):
+        return {}
+    return {
+        "date": str(df["date"].iloc[-1]),
+        "close": round(float(df["close"].iloc[-1]), 2),
+        "strength": round(float(r["strength"]), 2),   # 最长绿柱是常态的几倍
+        "shrink": round(float(r["shrink"]), 4),       # 已比最长那根短了多少
+    }
+
+
+# =============================================================================
 # 汇总：给某个标的算出"今天有没有信号"
 # =============================================================================
 def scan_latest(df: pd.DataFrame) -> dict:

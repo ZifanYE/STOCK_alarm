@@ -84,22 +84,31 @@ def cn_date(d: datetime.date) -> str:
 # =============================================================================
 # 扫描
 # =============================================================================
-def scan(conn) -> list[dict]:
+def scan(conn) -> tuple[list[dict], list[dict]]:
+    """返回 (买入信号, 绿柱缩短)。"""
     codes = store.all_codes(conn)
     if not codes:
         print("❌ 数据库是空的。先跑： python fetch_bs.py --full")
         sys.exit(1)
 
-    hits = []
+    hits, pre = [], []
     for code, name, kind, industry in codes:
         df = store.load(conn, code, limit=400)
+        info = {"code": code, "name": name, "kind": kind, "industry": industry}
         r = sig.scan_latest(df)
         if r:
-            r.update({"code": code, "name": name, "kind": kind, "industry": industry})
+            r.update(info)
             hits.append(r)
+        p = sig.scan_green_shrink(df)
+        if p:
+            p.update(info)
+            pre.append(p)
 
     # 先按行业聚在一起（方便看扎堆），行业内多重信号排前面
-    return sorted(hits, key=lambda x: (x["industry"], -x["score"], x["code"]))
+    hits = sorted(hits, key=lambda x: (x["industry"], -x["score"], x["code"]))
+    # 绿柱越长（相对自己的常态）越靠前
+    pre = sorted(pre, key=lambda x: -x["strength"])
+    return hits, pre
 
 
 def group_by_industry(hits: list[dict]) -> list[tuple[str, list]]:
@@ -113,7 +122,24 @@ def group_by_industry(hits: list[dict]) -> list[tuple[str, list]]:
 # =============================================================================
 # 企微 markdown
 # =============================================================================
-def build_message(hits: list[dict], day: datetime.date, data_date: str) -> str:
+def shrink_lines(pre: list[dict], limit: int) -> list[str]:
+    """绿柱缩短段落：长绿柱明显变短，尚未金叉。"""
+    if not pre:
+        return []
+    L = [f"> **🔭 绿柱缩短 {len(pre)} 只**　<font color=\"comment\">"
+         f"长绿柱明显变短，尚未金叉</font>"]
+    for h in pre[:limit]:
+        L.append(f"> ▫ {h['name']}　`{h['code']}`　¥{h['close']}"
+                 f"　<font color=\"warning\">绿柱为常态 {h['strength']:.1f} 倍"
+                 f"，已缩短 {h['shrink']*100:.0f}%</font>")
+    if len(pre) > limit:
+        L.append(f"> <font color=\"comment\">…另有 {len(pre)-limit} 只</font>")
+    L.append("> ")
+    return L
+
+
+def build_message(hits: list[dict], day: datetime.date, data_date: str,
+                  pre: list[dict] | None = None) -> str:
     """
     合并成**一条** markdown。企微一条消息只能一个 msgtype，图文没法共存，
     所以选 markdown —— 通知栏能读到开头，群里展开能看全。
@@ -127,10 +153,13 @@ def build_message(hits: list[dict], day: datetime.date, data_date: str) -> str:
     """
     ds = cn_date(day)
 
+    pre = pre or []
     if not hits:
-        return (f"### 📉 {ds}｜今日无买入信号\n"
-                f"> 沪深300 中，MACD 金叉 / 底背离均无标的命中。\n"
-                f"> <font color=\"comment\">数据截至 {data_date}｜非投资建议</font>")
+        L = [f"### 📉 {ds}｜今日无买入信号",
+             "> 沪深300 中，MACD 金叉 / 底背离均无标的命中。", "> "]
+        L += shrink_lines(pre, limit=15)
+        L.append(f"> <font color=\"comment\">数据截至 {data_date}｜非投资建议</font>")
+        return "\n".join(L)
 
     groups = group_by_industry(hits)
     crowded = [g for g, items in groups if len(items) >= 3]
@@ -157,6 +186,8 @@ def build_message(hits: list[dict], day: datetime.date, data_date: str) -> str:
                     f"{'+'.join(h['signals'])}</font>{dif}")
             L.append("> ")
 
+        L += shrink_lines(pre, limit=10 if verbose else 5)
+
         if crowded:
             L.append(f"> <font color=\"warning\">⚠️ {'、'.join(crowded)} 同板块共振，"
                      f"这些信号并非相互独立，同时买入不构成分散</font>")
@@ -169,6 +200,20 @@ def build_message(hits: list[dict], day: datetime.date, data_date: str) -> str:
     if len(msg.encode()) > 4000:
         msg = compose(verbose=False)      # 降级：砍掉 DIF 暂时不需要限制
     return msg
+
+
+def merge_for_record(hits: list[dict], pre: list[dict]) -> list[dict]:
+    """
+    归档用：绿柱缩短也写进 picks.db（信号名「绿柱缩短」），复盘/月报才能统计它准不准。
+    picks 表主键是 (date, code)，同一只既有底背离又有绿柱缩短时合并成一行。
+    """
+    out = {h["code"]: {**h, "signals": list(h["signals"])} for h in hits}
+    for p in pre:
+        if p["code"] in out:
+            out[p["code"]]["signals"].append("绿柱缩短")
+        else:
+            out[p["code"]] = {**p, "signals": ["绿柱缩短"], "score": 1}
+    return list(out.values())
 
 
 def push(content: str, kind: str = "text") -> bool:
@@ -236,7 +281,7 @@ def main():
 
     # 2. 算信号
     conn = store.connect()
-    hits = scan(conn)
+    hits, pre = scan(conn)
 
     newest = conn.execute("SELECT MAX(date) FROM daily").fetchone()[0]
     print(f"\n数据截至 {newest}　命中 {len(hits)} 只：")
@@ -245,12 +290,17 @@ def main():
               f"{h['close']}  {'/'.join(h['signals'])}")
     if len(hits) > 25:
         print(f"  …另有 {len(hits)-25} 只")
+    print(f"\n绿柱缩短 {len(pre)} 只：")
+    for h in pre[:25]:
+        print(f"  ▫ {h['name']}({h['code']}) {h['close']}  "
+              f"绿柱为常态 {h['strength']:.1f} 倍，已缩短 {h['shrink']*100:.0f}%")
 
     with open("data/signals.json", "w", encoding="utf-8") as f:
-        json.dump({"date": str(today), "data_date": newest, "hits": hits},
+        json.dump({"date": str(today), "data_date": newest, "hits": hits,
+                   "green_shrink": pre},
                   f, ensure_ascii=False, indent=2)
 
-    msg = build_message(hits, today, newest or "-")
+    msg = build_message(hits, today, newest or "-", pre)
 
     # 3. 推送：只发一条 markdown。
     # 老板嫌两条烦，而企微一条消息只能一个 msgtype（图文不能共存），
@@ -262,7 +312,7 @@ def main():
     else:
         # 归档今日推荐 → picks 表，供 review.py 日后复盘
         import review
-        n_rec = review.record_picks(today, hits)  # 自己写 picks.db，不碰 market.db
+        n_rec = review.record_picks(today, merge_for_record(hits, pre))
         if n_rec:
             print(f"🗂  已归档 {n_rec} 条推荐 → picks 表（review.py 复盘用）")
 
