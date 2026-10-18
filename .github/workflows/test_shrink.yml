@@ -1,0 +1,56 @@
+name: test-shrink
+
+# 手动跑 test_shrink.py，看「绿柱缩短」信号当前的状况。只读，不推送、不提交。
+# market.db 从 daily-signal 存的缓存里取，和每日推送用的是同一份数据。
+
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: '回看最近 N 个交易日的触发（0 = 只看今天 + 观察名单）'
+        type: string
+        default: '0'
+      code:
+        description: '只看一只票的明细（如 600519，留空不用）'
+        type: string
+        default: ''
+      ratio:
+        description: '绿柱「很长」的倍数'
+        type: string
+        default: '2.0'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Restore database
+        uses: actions/cache/restore@v4
+        with:
+          path: data/market.db
+          key: market-db-${{ github.run_id }}
+          restore-keys: |
+            market-db-
+
+      - name: Run
+        run: |
+          if [ ! -f data/market.db ]; then
+            echo "❌ 没取到 market.db 缓存，先让 daily-signal 跑一次"; exit 1
+          fi
+          if [ -n "${{ inputs.code }}" ]; then
+            python test_shrink.py --code "${{ inputs.code }}" --ratio "${{ inputs.ratio }}"
+          elif [ "${{ inputs.days }}" != "0" ]; then
+            python test_shrink.py --days "${{ inputs.days }}" --ratio "${{ inputs.ratio }}"
+          else
+            python test_shrink.py --ratio "${{ inputs.ratio }}"
+          fi
