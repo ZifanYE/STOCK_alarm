@@ -92,6 +92,101 @@ def bullish_divergence(
 
 
 # =============================================================================
+# 信号 3：金叉预警 —— 深跌后 MACD 拐头，DIF 还没上穿 DEA
+# =============================================================================
+# 金叉是滞后的：等 DIF 上穿 DEA，价格往往已经离最低点反弹了一截。
+# 这里在金叉**之前**找「绿柱连续缩短、DIF 拐头向上、离金叉只差一点」的票，
+# 并且只要「这一波跌得够深」的 —— 浅跌后的拐头多半只是震荡，没意义。
+#
+# 核心是 cross_price()：MACD 全是 EMA，EMA 对收盘价是线性的，
+# 所以能**精确反解**出「明天收盘至少到多少，DIF 就会上穿 DEA」。
+# 需要的涨幅越小，说明越接近金叉。全部只用到当天收盘为止的数据，无未来函数。
+# =============================================================================
+def cross_price(close: pd.Series, fast=12, slow=26, signal=9) -> pd.Series:
+    """
+    每一天算：下一根 K 线收盘价 ≥ 这个值时，DIF 会上穿（或保持在）DEA 上方。
+
+    推导：设明天收盘 c，
+        DIF' = a_f·c + (1-a_f)·EMA_f − a_s·c − (1-a_s)·EMA_s
+        DEA' = DEA + a_sig·(DIF' − DEA)
+      → DIF' − DEA' = (1−a_sig)·(DIF' − DEA)，所以 DIF' ≥ DEA' ⟺ DIF' ≥ DEA
+      → c ≥ (DEA − (1−a_f)·EMA_f + (1−a_s)·EMA_s) / (a_f − a_s)
+    """
+    a_f, a_s = 2 / (fast + 1), 2 / (slow + 1)
+    ema_f = close.ewm(span=fast, adjust=False).mean()
+    ema_s = close.ewm(span=slow, adjust=False).mean()
+    dea = (ema_f - ema_s).ewm(span=signal, adjust=False).mean()
+    return (dea - (1 - a_f) * ema_f + (1 - a_s) * ema_s) / (a_f - a_s)
+
+
+def pre_cross(
+    df: pd.DataFrame,
+    min_drop: float = 0.20,
+    lookback: int = 60,
+    max_need: float = 0.05,
+    max_bounce: float = 0.12,
+    shrink: float = 0.6,
+) -> pd.DataFrame:
+    """
+    逐日标记「金叉预警」，返回 DataFrame：flag 列为是否触发，其余是展示用的数值。
+
+    触发条件（全部满足，且**昨天还不满足**，避免同一个坑天天推）：
+      1. 未金叉：DIF < DEA，且 DIF < 0（零轴下方，属于超跌区）
+      2. 拐头：绿柱连续 2 天缩短，且 DIF 当天向上
+      3. 收敛：当前绿柱 ≤ 本波最长绿柱的 shrink 倍（已明显缩短，不是刚开始减速）
+      4. 临近：明天只需涨 ≤ max_need 就会金叉（见 cross_price）
+      5. 深跌：近 20 天最低价 较 近 lookback 天最高价 跌了 ≥ min_drop
+      6. 未远离底部：收盘较近 20 天最低价反弹 ≤ max_bounce（涨太多就不叫抄底了）
+    """
+    close = df["close"]
+    high = df["high"] if "high" in df else close
+    low = df["low"] if "low" in df else close
+    dif, dea, hist = macd(close)
+
+    # 本波绿柱：从上一次 hist ≥ 0 之后开始算，取其中最小值（最长的绿柱）
+    wave_id = (hist >= 0).cumsum()
+    wave_min = hist.where(hist < 0).groupby(wave_id).cummin()
+
+    peak = high.rolling(lookback, min_periods=20).max()
+    bottom = low.rolling(20, min_periods=10).min()
+    drop = 1 - bottom / peak
+    bounce = close / bottom - 1
+    need = cross_price(close) / close - 1
+
+    cond = (
+        (dif < dea) & (dif < 0)
+        & (hist > hist.shift(1)) & (hist.shift(1) > hist.shift(2))
+        & (dif > dif.shift(1))
+        & (hist >= wave_min * shrink)
+        & (need <= max_need)
+        & (drop >= min_drop)
+        & (bounce <= max_bounce)
+    ).fillna(False)
+
+    out = pd.DataFrame({
+        "flag": cond & ~cond.shift(1, fill_value=False),
+        "need": need, "drop": drop, "bounce": bounce,
+    }, index=df.index)
+    return out
+
+
+def scan_pre_cross(df: pd.DataFrame, **kw) -> dict:
+    """最新一根 K 线是否触发金叉预警。没触发返回 {}。"""
+    if df is None or len(df) < 60:
+        return {}
+    r = pre_cross(df, **kw).iloc[-1]
+    if not bool(r["flag"]):
+        return {}
+    return {
+        "date": str(df["date"].iloc[-1]),
+        "close": round(float(df["close"].iloc[-1]), 2),
+        "need": round(float(r["need"]), 4),      # 明天涨多少就金叉
+        "drop": round(float(r["drop"]), 4),      # 这一波跌了多少
+        "bounce": round(float(r["bounce"]), 4),  # 已从低点反弹多少
+    }
+
+
+# =============================================================================
 # 汇总：给某个标的算出"今天有没有信号"
 # =============================================================================
 def scan_latest(df: pd.DataFrame) -> dict:
