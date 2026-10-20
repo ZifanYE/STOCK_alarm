@@ -1,171 +1,111 @@
 {
-  "date": "2026-10-19",
-  "data_date": "2026-10-19",
+  "date": "2026-10-20",
+  "data_date": "2026-10-20",
   "hits": [
     {
-      "date": "2026-10-19",
-      "close": 23.0,
-      "dif": -0.9265,
-      "dea": -0.9339,
-      "hist": 0.0147,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "000792",
-      "name": "盐湖股份",
-      "kind": "stock",
-      "industry": "C26化学原料和化学制品制造业"
-    },
-    {
-      "date": "2026-10-19",
-      "close": 7.18,
-      "dif": -0.228,
-      "dea": -0.2381,
-      "hist": 0.0201,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "000425",
-      "name": "徐工机械",
-      "kind": "stock",
-      "industry": "C35专用设备制造业"
-    },
-    {
-      "date": "2026-10-19",
-      "close": 7.14,
-      "dif": -0.0279,
-      "dea": -0.0329,
-      "hist": 0.01,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "000625",
-      "name": "长安汽车",
-      "kind": "stock",
-      "industry": "C36汽车制造业"
-    },
-    {
-      "date": "2026-10-19",
-      "close": 24.2,
-      "dif": -1.2261,
-      "dea": -1.2583,
-      "hist": 0.0644,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "002625",
-      "name": "光启技术",
-      "kind": "stock",
-      "industry": "C37铁路、船舶、航空航天和其他运输设备制造业"
-    },
-    {
-      "date": "2026-10-19",
-      "close": 11.49,
-      "dif": -0.0238,
-      "dea": -0.0268,
-      "hist": 0.0059,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "600372",
-      "name": "中航机载",
-      "kind": "stock",
-      "industry": "C37铁路、船舶、航空航天和其他运输设备制造业"
-    },
-    {
-      "date": "2026-10-19",
-      "close": 40.11,
-      "dif": 0.1407,
-      "dea": 0.1237,
-      "hist": 0.0338,
-      "signals": [
-        "零轴上金叉"
-      ],
-      "score": 1,
-      "code": "600893",
-      "name": "航发动力",
-      "kind": "stock",
-      "industry": "C37铁路、船舶、航空航天和其他运输设备制造业"
-    },
-    {
-      "date": "2026-10-19",
-      "close": 25.2,
-      "dif": -0.0385,
-      "dea": -0.0421,
-      "hist": 0.0071,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "601877",
-      "name": "正泰电器",
-      "kind": "stock",
-      "industry": "C38电气机械和器材制造业"
-    },
-    {
-      "date": "2026-10-19",
-      "close": 1.2,
-      "dif": -0.0244,
-      "dea": -0.0247,
-      "hist": 0.0006,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "600221",
-      "name": "海航控股",
-      "kind": "stock",
-      "industry": "G56航空运输业"
-    },
-    {
-      "date": "2026-10-19",
-      "close": 8.73,
-      "dif": -0.0164,
-      "dea": -0.0169,
+      "date": "2026-10-20",
+      "close": 19.39,
+      "dif": -0.3597,
+      "dea": -0.3602,
       "hist": 0.001,
       "signals": [
         "低位金叉"
       ],
       "score": 1,
-      "code": "601825",
-      "name": "沪农商行",
+      "code": "600426",
+      "name": "华鲁恒升",
       "kind": "stock",
-      "industry": "J66货币金融服务"
-    }
-  ],
-  "green_shrink": [
-    {
-      "date": "2026-10-19",
-      "close": 28.06,
-      "strength": 2.34,
-      "shrink": 0.2396,
-      "code": "600522",
-      "name": "中天科技",
-      "kind": "stock",
-      "industry": "C38电气机械和器材制造业"
+      "industry": "C26化学原料和化学制品制造业"
     },
     {
-      "date": "2026-10-19",
-      "close": 25.76,
-      "strength": 2.16,
-      "shrink": 0.2338,
-      "code": "300433",
-      "name": "蓝思科技",
+      "date": "2026-10-20",
+      "close": 56.2,
+      "dif": -1.1869,
+      "dea": -1.5744,
+      "hist": 0.775,
+      "signals": [
+        "低位金叉"
+      ],
+      "score": 1,
+      "code": "688036",
+      "name": "传音控股",
       "kind": "stock",
       "industry": "C39计算机、通信和其他电子设备制造业"
     },
     {
-      "date": "2026-10-19",
-      "close": 46.2,
-      "strength": 2.12,
-      "shrink": 0.3797,
-      "code": "002475",
-      "name": "立讯精密",
+      "date": "2026-10-20",
+      "close": 22.59,
+      "dif": -0.6247,
+      "dea": -0.6487,
+      "hist": 0.0479,
+      "signals": [
+        "低位金叉"
+      ],
+      "score": 1,
+      "code": "601698",
+      "name": "中国卫通",
+      "kind": "stock",
+      "industry": "I63电信、广播电视和卫星传输服务"
+    }
+  ],
+  "green_shrink": [
+    {
+      "date": "2026-10-20",
+      "close": 122.15,
+      "strength": 4.75,
+      "shrink": 0.2334,
+      "code": "002384",
+      "name": "东山精密",
+      "kind": "stock",
+      "industry": "C39计算机、通信和其他电子设备制造业"
+    },
+    {
+      "date": "2026-10-20",
+      "close": 48.77,
+      "strength": 3.81,
+      "shrink": 0.2795,
+      "code": "601138",
+      "name": "工业富联",
+      "kind": "stock",
+      "industry": "C39计算机、通信和其他电子设备制造业"
+    },
+    {
+      "date": "2026-10-20",
+      "close": 89.47,
+      "strength": 3.04,
+      "shrink": 0.2082,
+      "code": "300661",
+      "name": "圣邦股份",
+      "kind": "stock",
+      "industry": "C39计算机、通信和其他电子设备制造业"
+    },
+    {
+      "date": "2026-10-20",
+      "close": 76.2,
+      "strength": 2.96,
+      "shrink": 0.223,
+      "code": "000988",
+      "name": "华工科技",
+      "kind": "stock",
+      "industry": "C39计算机、通信和其他电子设备制造业"
+    },
+    {
+      "date": "2026-10-20",
+      "close": 130.0,
+      "strength": 2.78,
+      "shrink": 0.2942,
+      "code": "688521",
+      "name": "芯原股份",
+      "kind": "stock",
+      "industry": "I65软件和信息技术服务业"
+    },
+    {
+      "date": "2026-10-20",
+      "close": 109.15,
+      "strength": 2.66,
+      "shrink": 0.2787,
+      "code": "300866",
+      "name": "安克创新",
       "kind": "stock",
       "industry": "C39计算机、通信和其他电子设备制造业"
     }
