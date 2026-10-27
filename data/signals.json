@@ -1,438 +1,283 @@
 {
-  "date": "2026-10-26",
-  "data_date": "2026-10-26",
+  "date": "2026-10-27",
+  "data_date": "2026-10-27",
   "hits": [
     {
-      "date": "2026-10-26",
-      "close": 5.56,
-      "dif": 0.0384,
-      "dea": 0.0382,
-      "hist": 0.0005,
-      "signals": [
-        "零轴上金叉"
-      ],
-      "score": 1,
-      "code": "600028",
-      "name": "中国石化",
-      "kind": "stock",
-      "industry": "B07石油和天然气开采业"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 35.16,
-      "dif": 0.3782,
-      "dea": 0.3389,
-      "hist": 0.0786,
-      "signals": [
-        "零轴上金叉"
-      ],
-      "score": 1,
-      "code": "600938",
-      "name": "中国海油",
-      "kind": "stock",
-      "industry": "B07石油和天然气开采业"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 30.28,
-      "dif": -1.9297,
-      "dea": -1.961,
-      "hist": 0.0625,
+      "date": "2026-10-27",
+      "close": 57.19,
+      "dif": -1.8846,
+      "dea": -1.9287,
+      "hist": 0.0882,
       "signals": [
         "低位金叉"
       ],
       "score": 1,
-      "code": "600160",
-      "name": "巨化股份",
+      "code": "001280",
+      "name": "中国铀业",
+      "kind": "stock",
+      "industry": "B09有色金属矿采选业"
+    },
+    {
+      "date": "2026-10-27",
+      "close": 22.21,
+      "dif": -0.9245,
+      "dea": -0.9342,
+      "hist": 0.0196,
+      "signals": [
+        "低位金叉"
+      ],
+      "score": 1,
+      "code": "000792",
+      "name": "盐湖股份",
       "kind": "stock",
       "industry": "C26化学原料和化学制品制造业"
     },
     {
-      "date": "2026-10-26",
-      "close": 7.12,
-      "dif": -0.1896,
-      "dea": -0.2173,
-      "hist": 0.0552,
-      "signals": [
-        "底背离"
-      ],
-      "score": 1,
-      "code": "000425",
-      "name": "徐工机械",
-      "kind": "stock",
-      "industry": "C35专用设备制造业"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 91.16,
-      "dif": -9.4874,
-      "dea": -9.6827,
-      "hist": 0.3905,
+      "date": "2026-10-27",
+      "close": 13.2,
+      "dif": -0.07,
+      "dea": -0.0909,
+      "hist": 0.0419,
       "signals": [
         "低位金叉"
       ],
       "score": 1,
-      "code": "002353",
-      "name": "杰瑞股份",
+      "code": "300122",
+      "name": "智飞生物",
       "kind": "stock",
-      "industry": "C35专用设备制造业"
+      "industry": "C27医药制造业"
     },
     {
-      "date": "2026-10-26",
-      "close": 82.4,
-      "dif": -1.2887,
-      "dea": -1.3441,
-      "hist": 0.1107,
+      "date": "2026-10-27",
+      "close": 36.3,
+      "dif": -2.1493,
+      "dea": -2.2011,
+      "hist": 0.1035,
       "signals": [
         "低位金叉"
       ],
       "score": 1,
-      "code": "002594",
-      "name": "比亚迪",
+      "code": "002466",
+      "name": "天齐锂业",
+      "kind": "stock",
+      "industry": "C32有色金属冶炼和压延加工业"
+    },
+    {
+      "date": "2026-10-27",
+      "close": 11.92,
+      "dif": -0.3529,
+      "dea": -0.3628,
+      "hist": 0.0198,
+      "signals": [
+        "低位金叉"
+      ],
+      "score": 1,
+      "code": "002532",
+      "name": "天山铝业",
+      "kind": "stock",
+      "industry": "C32有色金属冶炼和压延加工业"
+    },
+    {
+      "date": "2026-10-27",
+      "close": 8.76,
+      "dif": -0.1891,
+      "dea": -0.1929,
+      "hist": 0.0077,
+      "signals": [
+        "低位金叉"
+      ],
+      "score": 1,
+      "code": "601600",
+      "name": "中国铝业",
+      "kind": "stock",
+      "industry": "C32有色金属冶炼和压延加工业"
+    },
+    {
+      "date": "2026-10-27",
+      "close": 15.49,
+      "dif": -0.0224,
+      "dea": -0.0311,
+      "hist": 0.0176,
+      "signals": [
+        "低位金叉"
+      ],
+      "score": 1,
+      "code": "600741",
+      "name": "华域汽车",
       "kind": "stock",
       "industry": "C36汽车制造业"
     },
     {
-      "date": "2026-10-26",
-      "close": 11.56,
-      "dif": 0.0011,
-      "dea": -0.0168,
-      "hist": 0.0359,
+      "date": "2026-10-27",
+      "close": 46.58,
+      "dif": -1.649,
+      "dea": -1.6696,
+      "hist": 0.0412,
+      "signals": [
+        "低位金叉"
+      ],
+      "score": 1,
+      "code": "300014",
+      "name": "亿纬锂能",
+      "kind": "stock",
+      "industry": "C38电气机械和器材制造业"
+    },
+    {
+      "date": "2026-10-27",
+      "close": 17.71,
+      "dif": 0.401,
+      "dea": 0.3925,
+      "hist": 0.017,
       "signals": [
         "零轴上金叉"
       ],
       "score": 1,
-      "code": "600372",
-      "name": "中航机载",
-      "kind": "stock",
-      "industry": "C37铁路、船舶、航空航天和其他运输设备制造业"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 118.82,
-      "dif": -3.1681,
-      "dea": -3.4105,
-      "hist": 0.4847,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "300866",
-      "name": "安克创新",
-      "kind": "stock",
-      "industry": "C39计算机、通信和其他电子设备制造业"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 50.71,
-      "dif": -2.2358,
-      "dea": -2.2511,
-      "hist": 0.0307,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "600118",
-      "name": "中国卫星",
-      "kind": "stock",
-      "industry": "C39计算机、通信和其他电子设备制造业"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 210.2,
-      "dif": 1.5154,
-      "dea": 0.2414,
-      "hist": 2.5479,
-      "signals": [
-        "底背离"
-      ],
-      "score": 1,
-      "code": "603893",
-      "name": "瑞芯微",
-      "kind": "stock",
-      "industry": "C39计算机、通信和其他电子设备制造业"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 102.77,
-      "dif": -5.2851,
-      "dea": -5.2986,
-      "hist": 0.027,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "688981",
-      "name": "中芯国际",
-      "kind": "stock",
-      "industry": "C39计算机、通信和其他电子设备制造业"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 20.04,
-      "dif": 0.3741,
-      "dea": 0.3732,
-      "hist": 0.0018,
-      "signals": [
-        "零轴上金叉"
-      ],
-      "score": 1,
-      "code": "600803",
-      "name": "新奥股份",
-      "kind": "stock",
-      "industry": "D45燃气生产和供应业"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 4.77,
-      "dif": -0.0678,
-      "dea": -0.068,
-      "hist": 0.0005,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "600029",
-      "name": "南方航空",
-      "kind": "stock",
-      "industry": "G56航空运输业"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 3.23,
-      "dif": -0.0746,
-      "dea": -0.0783,
-      "hist": 0.0075,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "600115",
-      "name": "中国东航",
-      "kind": "stock",
-      "industry": "G56航空运输业"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 1.19,
-      "dif": -0.0239,
-      "dea": -0.0246,
-      "hist": 0.0014,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "600221",
-      "name": "海航控股",
-      "kind": "stock",
-      "industry": "G56航空运输业"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 101.3,
-      "dif": 0.7738,
-      "dea": 0.6847,
-      "hist": 0.1782,
-      "signals": [
-        "零轴上金叉"
-      ],
-      "score": 1,
-      "code": "600941",
-      "name": "中国移动",
-      "kind": "stock",
-      "industry": "I63电信、广播电视和卫星传输服务"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 968.0,
-      "dif": -41.2067,
-      "dea": -41.5469,
-      "hist": 0.6806,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "688256",
-      "name": "寒武纪",
-      "kind": "stock",
-      "industry": "I65软件和信息技术服务业"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 6.58,
-      "dif": -0.1207,
-      "dea": -0.128,
-      "hist": 0.0147,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "000617",
-      "name": "中油资本",
-      "kind": "stock",
-      "industry": "J66货币金融服务"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 8.58,
-      "dif": 0.121,
-      "dea": 0.1196,
-      "hist": 0.0027,
-      "signals": [
-        "零轴上金叉"
-      ],
-      "score": 1,
-      "code": "601398",
-      "name": "工商银行",
-      "kind": "stock",
-      "industry": "J66货币金融服务"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 8.76,
-      "dif": -0.015,
-      "dea": -0.0209,
-      "hist": 0.0118,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "601825",
-      "name": "沪农商行",
-      "kind": "stock",
-      "industry": "J66货币金融服务"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 4.41,
-      "dif": -0.0246,
-      "dea": -0.0247,
-      "hist": 0.0003,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "000166",
-      "name": "申万宏源",
-      "kind": "stock",
-      "industry": "J67资本市场服务"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 25.69,
-      "dif": -0.3853,
-      "dea": -0.3862,
-      "hist": 0.0019,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "600030",
-      "name": "中信证券",
-      "kind": "stock",
-      "industry": "J67资本市场服务"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 13.69,
-      "dif": -0.1685,
-      "dea": -0.1811,
-      "hist": 0.0252,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "601788",
-      "name": "光大证券",
-      "kind": "stock",
-      "industry": "J67资本市场服务"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 9.02,
-      "dif": -0.0738,
-      "dea": -0.0813,
-      "hist": 0.015,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "601878",
-      "name": "浙商证券",
-      "kind": "stock",
-      "industry": "J67资本市场服务"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 52.62,
-      "dif": -0.6428,
-      "dea": -0.6726,
-      "hist": 0.0596,
-      "signals": [
-        "低位金叉"
-      ],
-      "score": 1,
-      "code": "601318",
-      "name": "中国平安",
-      "kind": "stock",
-      "industry": "J68保险业"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 8.16,
-      "dif": 0.1664,
-      "dea": 0.1383,
-      "hist": 0.0562,
-      "signals": [
-        "零轴上金叉"
-      ],
-      "score": 1,
-      "code": "001979",
-      "name": "招商蛇口",
-      "kind": "stock",
-      "industry": "K70房地产业"
-    }
-  ],
-  "green_shrink": [
-    {
-      "date": "2026-10-26",
-      "close": 7.35,
-      "strength": 3.69,
-      "shrink": 0.2025,
-      "code": "601319",
-      "name": "中国人保",
-      "kind": "stock",
-      "industry": "J68保险业"
-    },
-    {
-      "date": "2026-10-26",
-      "close": 3.39,
-      "strength": 2.98,
-      "shrink": 0.3775,
-      "code": "600905",
-      "name": "三峡能源",
+      "code": "600674",
+      "name": "川投能源",
       "kind": "stock",
       "industry": "D44电力、热力生产和供应业"
     },
     {
-      "date": "2026-10-26",
-      "close": 35.17,
-      "strength": 2.61,
-      "shrink": 0.2954,
-      "code": "600150",
-      "name": "中国船舶",
+      "date": "2026-10-27",
+      "close": 16.54,
+      "dif": 0.0508,
+      "dea": 0.0506,
+      "hist": 0.0005,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "601607",
+      "name": "上海医药",
       "kind": "stock",
-      "industry": "C37铁路、船舶、航空航天和其他运输设备制造业"
+      "industry": "F52零售业"
     },
     {
-      "date": "2026-10-26",
-      "close": 4.94,
-      "strength": 2.22,
-      "shrink": 0.2765,
-      "code": "601238",
-      "name": "广汽集团",
+      "date": "2026-10-27",
+      "close": 4.93,
+      "dif": 0.0338,
+      "dea": 0.0333,
+      "hist": 0.0009,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "601006",
+      "name": "大秦铁路",
       "kind": "stock",
-      "industry": "C36汽车制造业"
+      "industry": "G53铁路运输业"
+    },
+    {
+      "date": "2026-10-27",
+      "close": 38.17,
+      "dif": -1.1784,
+      "dea": -1.1967,
+      "hist": 0.0365,
+      "signals": [
+        "低位金叉"
+      ],
+      "score": 1,
+      "code": "601021",
+      "name": "春秋航空",
+      "kind": "stock",
+      "industry": "G56航空运输业"
+    },
+    {
+      "date": "2026-10-27",
+      "close": 5.68,
+      "dif": -0.061,
+      "dea": -0.0636,
+      "hist": 0.0051,
+      "signals": [
+        "低位金叉"
+      ],
+      "score": 1,
+      "code": "601111",
+      "name": "中国国航",
+      "kind": "stock",
+      "industry": "G56航空运输业"
+    },
+    {
+      "date": "2026-10-27",
+      "close": 9.82,
+      "dif": 0.1263,
+      "dea": 0.1208,
+      "hist": 0.011,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "600000",
+      "name": "浦发银行",
+      "kind": "stock",
+      "industry": "J66货币金融服务"
+    },
+    {
+      "date": "2026-10-27",
+      "close": 2.96,
+      "dif": 0.0064,
+      "dea": 0.0064,
+      "hist": 0.0,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "601916",
+      "name": "浙商银行",
+      "kind": "stock",
+      "industry": "J66货币金融服务"
+    },
+    {
+      "date": "2026-10-27",
+      "close": 17.35,
+      "dif": -0.3771,
+      "dea": -0.386,
+      "hist": 0.0179,
+      "signals": [
+        "低位金叉"
+      ],
+      "score": 1,
+      "code": "601688",
+      "name": "华泰证券",
+      "kind": "stock",
+      "industry": "J67资本市场服务"
+    },
+    {
+      "date": "2026-10-27",
+      "close": 35.1,
+      "dif": -0.8323,
+      "dea": -0.8757,
+      "hist": 0.0866,
+      "signals": [
+        "低位金叉"
+      ],
+      "score": 1,
+      "code": "601628",
+      "name": "中国人寿",
+      "kind": "stock",
+      "industry": "J68保险业"
+    }
+  ],
+  "green_shrink": [
+    {
+      "date": "2026-10-27",
+      "close": 17.4,
+      "strength": 6.17,
+      "shrink": 0.3119,
+      "code": "601872",
+      "name": "招商轮船",
+      "kind": "stock",
+      "industry": "G55水上运输业"
+    },
+    {
+      "date": "2026-10-27",
+      "close": 19.48,
+      "strength": 3.38,
+      "shrink": 0.3192,
+      "code": "600026",
+      "name": "中远海能",
+      "kind": "stock",
+      "industry": "G55水上运输业"
     }
   ]
 }
