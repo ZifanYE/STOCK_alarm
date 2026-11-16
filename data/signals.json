@@ -1,63 +1,307 @@
 {
-  "date": "2026-11-13",
-  "data_date": "2026-11-13",
+  "date": "2026-11-16",
+  "data_date": "2026-11-16",
   "hits": [
     {
-      "date": "2026-11-13",
-      "close": 124.99,
-      "dif": -27.2832,
-      "dea": -27.4626,
-      "hist": 0.3588,
+      "date": "2026-11-16",
+      "close": 17.93,
+      "dif": -0.6052,
+      "dea": -0.6281,
+      "hist": 0.0457,
       "signals": [
         "低位金叉"
       ],
       "score": 1,
-      "code": "300394",
-      "name": "天孚通信",
+      "code": "600188",
+      "name": "兖矿能源",
       "kind": "stock",
-      "industry": "C39计算机、通信和其他电子设备制造业"
+      "industry": "B06煤炭开采和洗选业"
     },
     {
-      "date": "2026-11-13",
-      "close": 8.85,
-      "dif": 0.0995,
-      "dea": 0.0957,
-      "hist": 0.0076,
+      "date": "2026-11-16",
+      "close": 27.7,
+      "dif": 0.0153,
+      "dea": 0.0077,
+      "hist": 0.0151,
       "signals": [
         "零轴上金叉"
       ],
       "score": 1,
-      "code": "601398",
-      "name": "工商银行",
+      "code": "601225",
+      "name": "陕西煤业",
       "kind": "stock",
-      "industry": "J66货币金融服务"
+      "industry": "B06煤炭开采和洗选业"
     },
     {
-      "date": "2026-11-13",
-      "close": 2.96,
-      "dif": 0.0057,
-      "dea": 0.0053,
-      "hist": 0.0009,
+      "date": "2026-11-16",
+      "close": 35.76,
+      "dif": 0.2724,
+      "dea": 0.2621,
+      "hist": 0.0205,
       "signals": [
         "零轴上金叉"
       ],
       "score": 1,
-      "code": "601916",
-      "name": "浙商银行",
+      "code": "603288",
+      "name": "海天味业",
+      "kind": "stock",
+      "industry": "C14食品制造业"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 55.92,
+      "dif": 0.8796,
+      "dea": 0.8494,
+      "hist": 0.0603,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "000538",
+      "name": "云南白药",
+      "kind": "stock",
+      "industry": "C27医药制造业"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 6.25,
+      "dif": 0.0666,
+      "dea": 0.0627,
+      "hist": 0.0078,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "600019",
+      "name": "宝钢股份",
+      "kind": "stock",
+      "industry": "C31黑色金属冶炼和压延加工业"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 30.49,
+      "dif": 0.2444,
+      "dea": 0.2367,
+      "hist": 0.0154,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "600900",
+      "name": "长江电力",
+      "kind": "stock",
+      "industry": "D44电力、热力生产和供应业"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 21.84,
+      "dif": 0.4978,
+      "dea": 0.4953,
+      "hist": 0.005,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "600803",
+      "name": "新奥股份",
+      "kind": "stock",
+      "industry": "D45燃气生产和供应业"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 3.65,
+      "dif": 0.0104,
+      "dea": 0.0093,
+      "hist": 0.0021,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "601018",
+      "name": "宁波港",
+      "kind": "stock",
+      "industry": "G55水上运输业"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 24.6,
+      "dif": 0.3348,
+      "dea": 0.3315,
+      "hist": 0.0067,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "600009",
+      "name": "上海机场",
+      "kind": "stock",
+      "industry": "G56航空运输业"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 35.23,
+      "dif": -0.0653,
+      "dea": -0.1279,
+      "hist": 0.1252,
+      "signals": [
+        "低位金叉"
+      ],
+      "score": 1,
+      "code": "002142",
+      "name": "宁波银行",
       "kind": "stock",
       "industry": "J66货币金融服务"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 3.51,
+      "dif": -0.0189,
+      "dea": -0.0209,
+      "hist": 0.0041,
+      "signals": [
+        "低位金叉"
+      ],
+      "score": 1,
+      "code": "600016",
+      "name": "民生银行",
+      "kind": "stock",
+      "industry": "J66货币金融服务"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 7.43,
+      "dif": 0.1088,
+      "dea": 0.1,
+      "hist": 0.0177,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "601077",
+      "name": "渝农商行",
+      "kind": "stock",
+      "industry": "J66货币金融服务"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 20.11,
+      "dif": 0.3975,
+      "dea": 0.3829,
+      "hist": 0.0293,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "601166",
+      "name": "兴业银行",
+      "kind": "stock",
+      "industry": "J66货币金融服务"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 5.8,
+      "dif": 0.0563,
+      "dea": 0.0545,
+      "hist": 0.0037,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "601658",
+      "name": "邮储银行",
+      "kind": "stock",
+      "industry": "J66货币金融服务"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 12.26,
+      "dif": 0.2275,
+      "dea": 0.2216,
+      "hist": 0.0118,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "601939",
+      "name": "建设银行",
+      "kind": "stock",
+      "industry": "J66货币金融服务"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 7.32,
+      "dif": 0.0817,
+      "dea": 0.0709,
+      "hist": 0.0216,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "601988",
+      "name": "中国银行",
+      "kind": "stock",
+      "industry": "J66货币金融服务"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 9.49,
+      "dif": 0.0806,
+      "dea": 0.0685,
+      "hist": 0.0243,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "601998",
+      "name": "中信银行",
+      "kind": "stock",
+      "industry": "J66货币金融服务"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 9.03,
+      "dif": -0.2355,
+      "dea": -0.2375,
+      "hist": 0.0041,
+      "signals": [
+        "低位金叉"
+      ],
+      "score": 1,
+      "code": "002736",
+      "name": "国信证券",
+      "kind": "stock",
+      "industry": "J67资本市场服务"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 13.23,
+      "dif": -0.273,
+      "dea": -0.286,
+      "hist": 0.026,
+      "signals": [
+        "低位金叉"
+      ],
+      "score": 1,
+      "code": "601136",
+      "name": "首创证券",
+      "kind": "stock",
+      "industry": "J67资本市场服务"
+    },
+    {
+      "date": "2026-11-16",
+      "close": 5.64,
+      "dif": 0.1392,
+      "dea": 0.136,
+      "hist": 0.0064,
+      "signals": [
+        "零轴上金叉"
+      ],
+      "score": 1,
+      "code": "002027",
+      "name": "分众传媒",
+      "kind": "stock",
+      "industry": "L72商务服务业"
     }
   ],
-  "green_shrink": [
-    {
-      "date": "2026-11-13",
-      "close": 30.85,
-      "strength": 10.82,
-      "shrink": 0.2225,
-      "code": "600938",
-      "name": "中国海油",
-      "kind": "stock",
-      "industry": "B07石油和天然气开采业"
-    }
-  ]
+  "green_shrink": []
 }
